@@ -43,11 +43,41 @@ console.log(firstName);                 // "Symbol(first name)"
 
 ## 检测符号类型
 
-TODO
+是的是的没错，符号是基本值，所以你可以用 `typeof` 来检测其类型。ECMAScript 6 为 `typeof` 做了扩展——当后面跟着一个符号的时候会返回 `"symbol"`。例如：
+
+```javascript
+var symbol = Symbol("test symbol");
+console.log(typeof symbol);         // "symbol"
+```
+
+虽然呢用别的间接方法来确定符号这种类型也不是不可以，但是 `typeof` 这种运算是最精确也是首选方案呢。
 
 ## 使用符号
 
-TODO
+你可以在任何你需要用已经搞好的属性名的时候使用符号。相信前面章节中使用括号的形式已经亮瞎了你们的氪金狗眼。但是！你可以在运算出来的对象字面属性名中使用符号，用 `Object.defineProperty()` 以及 `Object.defineProperties()`。例如：
+
+```javascript
+var firstName = Symbol("first name");
+var person = {
+    [firstName]     : "Nicholas"
+};
+
+// make the property read only
+Object.defineProperty(person, firstName, { writable: false });
+
+var lastName = Symbol("last name");
+Object.defineProperties(person, {
+    [lastName]  : {
+        value: "Zakas",
+        writable: false
+    }
+});
+
+console.log(person[firstName]);     // "Nicholas"
+console.log(person[lastName]);      // "Zakas"
+```
+
+对于对象字面形式中已计算的属性名，符号非常容易使用。*
 
 ## 共享符号
 
