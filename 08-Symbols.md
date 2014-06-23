@@ -81,7 +81,56 @@ console.log(person[lastName]);      // "Zakas"
 
 ## 共享符号
 
-TODO
+有时候你会发现你要在你代码的不同枝枝节节使用同一个符号。又来举个栗子，你可能想要在你的应用中使用两个不同的对象类型但是使用同一个符号属性来表示一个唯一的标识符。在跨文件中或者大型代码库中跟踪符号是灰常困难的，而且易出错。嘛嘛，所以说 ECMAScript 6 提供了一个全局符号表，有了它你就可以在任意地方使用它了。
+
+当你想使用共享的符号时，只需要使用 `Symbol.for()` 来代替 `Symbol()` 即可。`Symbol.for()` 函数接受一个参数，即符号的字符串标识符（这个标识符兼作符号描述）。举个栗子：
+
+```javascript
+var uid = Symbol.for("uid");
+var object = {};
+
+object[uid] = "12345";
+
+console.log(object[uid]);       // "12345"
+console.log(uid);               // "Symbol(uid)"
+```
+
+`Symbol.for()` 方法首先会去全局符号表中找朋友，如果找到有一个符号叫 `"uid"` 的那么就会拿过来；如果找不到的话就会创建一个新的符号然后以这个键名来注册到全局符号表中，最后这个符号会被返回。这意味着之后无论在哪里使用 `Symbol.for()` 的时候都会返回同一个好基友：
+
+```javascript
+var uid = Symbol.for("uid");
+var object = {
+    [uid]: "12345"
+};
+
+console.log(object[uid]);       // "12345"
+console.log(uid);               // "Symbol(uid)"
+
+var uid2 = Symbol.for("uid");
+
+console.log(uid === uid2);      // true
+console.log(object[uid2]);      // "12345"
+console.log(uid2);              // "Symbol(uid)"
+```
+
+栗纸中，`uid` 和 `uid2` 实际上包含了同一个符号，所以他们是可互换的。第一次调用 `Symbol.for()` 的时候创建一个符号然后第二次的时候就是从全局表中把这个小伙伴揪出来而已。
+
+共享符号的另一个独特之处就是，你可以使用 `Symbole.keyFor()` 来检索符号与键名之间的关联。老板再来一斤栗子：
+
+```javasript
+var uid = Symbol.for("uid");
+console.log(Symbol.keyFor(uid));    // "uid"
+
+var uid2 = Symbol.for("uid");
+console.log(Symbol.keyFor(uid2));   // "uid"
+
+var uid3 = Symbol("uid");
+console.log(Symbol.keyFor(uid3));   // undefined
+```
+
+注意 `uid` 和 `uid2` 都返回键 `"uid"`。但是符号 `uid3` 是不存在与全局符号表的，所以它在全局符号表中没有键名关联，也就是说 `Symbol.keyFor()` 就会返回 `undefined` 了。
+
+> 如同全局作用域一般，全局符号表是一个共享的环境。这就意味着你不能对什么是或者什么不是已经存在于环境中做假设。你需要使用符号键名的命名空间来减少第三方组件中的命名冲突。比如 jQuery 的话就用一个 `"jquery."` 前缀添加到所有键名当中，就比如说 `"jquery.element"`。
 
 ## 找到对象符号
 
