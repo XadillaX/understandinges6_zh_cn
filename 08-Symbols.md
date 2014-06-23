@@ -12,7 +12,34 @@ ECMAScript 6 中符号开始作为一种创建私有对象成员的方式——�
 
 ## 创建符号
 
-TODO
+你可以通过 `Symbol` 函数来创建一个符号，如：
+
+```javascript
+var firstName = Symbol();
+var person = {};
+
+person[firstName] = "Nicholas";
+console.log(person[firstName]);     // "Nicholas"
+```
+
+在样例中，一个叫 `firstName` 的符号被创建了，而且这小家伙被用来给 `person` 分贝了一个新的属性。当你每次想要访问这个属性的时候，你必须使用这个符号。不过为了你的性福生活着想，我们建议给符号取一个恰当好听的名字——不要使用一些无意义的单词什么的。
+
+> 因为符号是一种基本值，`new Symbol()` 就会抛出错误。别想尝试着去实例化一个 `Symbol`，因为它跟所谓的 `String`、`Number` 以及 `Boolean` 根本不是一路人。
+
+`Symbol` 函数有一个可选参数，你可以用它来描述这个符号。当然这个描述本身不能用于访问属性，它仅仅是用于调试用的。举个栗子说：
+
+```javascript
+var firstName = Symbol("first name");
+var person = {};
+
+person[firstName] = "Nicholas";
+
+console.log("first name" in person);    // false
+console.log(person[firstName]);         // "Nicholas"
+console.log(firstName);                 // "Symbol(first name)"
+```
+
+符号的描述被储存在内部叫 `[[Description]]` 的属性当中。无论每当显示或者隐式地使用符号的 `toString()` 函数时，这个属性就会被读取（就跟上面的栗子里面说的一样）。除此之外，你想直接访问 `[[Description]]` 别无他法。无论是用于静态阅读代码或者调试代码，我们推荐都为符号提供一个描述，这样就可以跟代码更愉快地玩耍了。
 
 ## 检测符号类型
 
