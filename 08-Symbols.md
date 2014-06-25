@@ -134,7 +134,26 @@ console.log(Symbol.keyFor(uid3));   // undefined
 
 ## 找到对象符号
 
-TODO
+符号属性可以与其它属性共存于对象之中，你可以通过 `Object.getOwnPropertySymbols()` 方法来访问符号属性。这个方法几乎与 `Object.getOwnPropertyNames()` 一样，只不过一个是返回符号，另一个是返回字符串罢了。从根本上来说，符号并不是属性名，所以 `Object.getOwnPropertyName()` 方法并不会返回符号，而是直接省略它们。
+
+`Object.getOwnPropertySymbols()` 的返回值是一个符号数组，代表了对象所对应的属性们。例如：
+
+```javascript
+var uid = Symbol.for("uid");
+var object = {
+    [uid]: "12345"
+};
+
+var symbols = Object.getOwnPropertySymbols(object);
+
+console.log(symbols.length);        // 1
+console.log(symbols[0]);            // "Symbol(uid)"
+console.log(object[symbols[0]]);    // "12345"
+```
+
+在上面的代码里面，`object` 有一个符号属性。通过 `Object.getOwnPropertySymbols()` 返回的数组中就只包含了这么一个符号。
+
+> 所有的对象一开始拥有 0 个符号属性。（即使有时候有一些继承上的符号属性）
 
 ## 广知符号
 
