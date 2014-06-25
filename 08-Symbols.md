@@ -117,7 +117,7 @@ console.log(uid2);              // "Symbol(uid)"
 
 共享符号的另一个独特之处就是，你可以使用 `Symbole.keyFor()` 来检索符号与键名之间的关联。老板再来一斤栗子：
 
-```javasript
+```javascript
 var uid = Symbol.for("uid");
 console.log(Symbol.keyFor(uid));    // "uid"
 
